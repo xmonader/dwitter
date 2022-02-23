@@ -42,5 +42,11 @@ func (msg *MsgCreateTweet) ValidateBasic() error {
 	if err != nil {
 		return sdkerrors.Wrapf(sdkerrors.ErrInvalidAddress, "invalid creator address (%s)", err)
 	}
+	if msg.Content == "" {
+		return sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, "content cannot be empty")
+	}
+	if len(msg.Content) > 5 {
+		return sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, "content cannot be longer than 5 characters")
+	}
 	return nil
 }
