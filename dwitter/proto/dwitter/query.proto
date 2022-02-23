@@ -5,6 +5,7 @@ import "gogoproto/gogo.proto";
 import "google/api/annotations.proto";
 import "cosmos/base/query/v1beta1/pagination.proto";
 import "dwitter/params.proto";
+import "dwitter/tweet.proto";
 // this line is used by starport scaffolding # 1
 
 option go_package = "github.com/xmonader/dwitter/x/dwitter/types";
@@ -33,10 +34,15 @@ message QueryParamsResponse {
 }
 
 message QueryTweetsRequest {
+  cosmos.base.query.v1beta1.PageRequest pagination = 1;
+
 }
 
+
 message QueryTweetsResponse {
-  string content = 1;
+  repeated Tweet Tweet = 1;
+  cosmos.base.query.v1beta1.PageResponse pagination = 2;
+
 }
 
 // this line is used by starport scaffolding # 3

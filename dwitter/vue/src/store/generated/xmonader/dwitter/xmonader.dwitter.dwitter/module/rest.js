@@ -158,9 +158,10 @@ export class Api extends HttpClient {
          * @summary Queries a list of Tweets items.
          * @request GET:/xmonader/dwitter/dwitter/tweets
          */
-        this.queryTweets = (params = {}) => this.request({
+        this.queryTweets = (query, params = {}) => this.request({
             path: `/xmonader/dwitter/dwitter/tweets`,
             method: "GET",
+            query: query,
             format: "json",
             ...params,
         });
