@@ -1,0 +1,9 @@
+syntax = "proto3";
+package xmonader.dwitter.dwitter;
+option go_package = "github.com/xmonader/dwitter/x/dwitter/types";
+
+message Tweet {
+  string creator = 1;
+  uint64 id = 2;
+  string content = 3; 
+}

@@ -1,4 +1,5 @@
 import { Params } from "./module/types/dwitter/params";
-export { Params };
+import { Tweet } from "./module/types/dwitter/tweet";
+export { Params, Tweet };
 declare const _default;
 export default _default;

@@ -3,9 +3,10 @@ import { txClient, queryClient, MissingWalletError , registry} from './module'
 import { SpVuexError } from '@starport/vuex'
 
 import { Params } from "./module/types/dwitter/params"
+import { Tweet } from "./module/types/dwitter/tweet"
 
 
-export { Params };
+export { Params, Tweet };
 
 async function initTxClient(vuexGetters) {
 	return await txClient(vuexGetters['common/wallet/signer'], {
@@ -47,6 +48,7 @@ const getDefaultState = () => {
 				
 				_Structure: {
 						Params: getStructure(Params.fromPartial({})),
+						Tweet: getStructure(Tweet.fromPartial({})),
 						
 		},
 		_Registry: registry,

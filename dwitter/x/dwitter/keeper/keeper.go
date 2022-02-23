@@ -67,6 +67,17 @@ func (k Keeper) SetTweetsCount(ctx sdk.Context, count uint64) {
 }
 
 func (k Keeper) AddTweet(ctx sdk.Context, tweet types.Tweet) (id uint64) {
-	k.GetTweetsCount(ctx)
+	count := k.GetTweetsCount(ctx)
 	tweet.Id = count
+	tweetsKeyByte := []byte(types.TweetKey)
+	store := prefix.NewStore(ctx.KVStore(k.storeKey), tweetsKeyByte)
+
+	tweetIdKey := make([]byte, 8)
+	binary.BigEndian.PutUint64(tweetIdKey, tweet.Id)
+
+	addedTweetBytes := k.cdc.MustMarshal(&tweet)
+	store.Set(tweetIdKey, addedTweetBytes)
+	k.SetTweetsCount(ctx, count+1)
+	return count
+
 }

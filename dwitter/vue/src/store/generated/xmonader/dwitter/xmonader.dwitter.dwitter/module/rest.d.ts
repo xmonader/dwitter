@@ -1,4 +1,7 @@
-export declare type DwitterMsgCreateTweetResponse = object;
+export interface DwitterMsgCreateTweetResponse {
+    /** @format uint64 */
+    id?: string;
+}
 /**
  * Params defines the parameters for the module.
  */
