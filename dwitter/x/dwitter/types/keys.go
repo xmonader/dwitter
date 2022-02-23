@@ -14,7 +14,9 @@ const (
 	QuerierRoute = ModuleName
 
 	// MemStoreKey defines the in-memory store key
-	MemStoreKey = "mem_dwitter"
+	MemStoreKey   = "mem_dwitter"
+	TweetKey      = "tweet-value-"
+	TweetCountKey = "tweet-count-"
 )
 
 func KeyPrefix(p string) []byte {

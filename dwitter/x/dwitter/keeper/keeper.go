@@ -1,11 +1,13 @@
 package keeper
 
 import (
+	"encoding/binary"
 	"fmt"
 
 	"github.com/tendermint/tendermint/libs/log"
 
 	"github.com/cosmos/cosmos-sdk/codec"
+	"github.com/cosmos/cosmos-sdk/store/prefix"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	paramtypes "github.com/cosmos/cosmos-sdk/x/params/types"
 	"github.com/xmonader/dwitter/x/dwitter/types"
@@ -43,4 +45,28 @@ func NewKeeper(
 
 func (k Keeper) Logger(ctx sdk.Context) log.Logger {
 	return ctx.Logger().With("module", fmt.Sprintf("x/%s", types.ModuleName))
+}
+
+func (k Keeper) GetTweetsCount(ctx sdk.Context) uint64 {
+	byteKey := []byte(types.TweetCountKey)
+
+	store := prefix.NewStore(ctx.KVStore(k.storeKey), byteKey)
+	bz := store.Get(byteKey)
+	if bz == nil {
+		return 0
+	}
+	return binary.BigEndian.Uint64(bz)
+}
+
+func (k Keeper) SetTweetsCount(ctx sdk.Context, count uint64) {
+	byteKey := []byte(types.TweetCountKey)
+	store := prefix.NewStore(ctx.KVStore(k.storeKey), byteKey)
+	bz := make([]byte, 8)
+	binary.BigEndian.PutUint64(bz, count)
+	store.Set(byteKey, bz)
+}
+
+func (k Keeper) AddTweet(ctx sdk.Context, tweet types.Tweet) (id uint64) {
+	k.GetTweetsCount(ctx)
+	tweet.Id = count
 }
