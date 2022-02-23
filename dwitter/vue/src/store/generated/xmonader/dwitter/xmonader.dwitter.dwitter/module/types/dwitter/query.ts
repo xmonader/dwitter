@@ -13,6 +13,12 @@ export interface QueryParamsResponse {
   params: Params | undefined;
 }
 
+export interface QueryTweetsRequest {}
+
+export interface QueryTweetsResponse {
+  content: string;
+}
+
 const baseQueryParamsRequest: object = {};
 
 export const QueryParamsRequest = {
@@ -110,10 +116,108 @@ export const QueryParamsResponse = {
   },
 };
 
+const baseQueryTweetsRequest: object = {};
+
+export const QueryTweetsRequest = {
+  encode(_: QueryTweetsRequest, writer: Writer = Writer.create()): Writer {
+    return writer;
+  },
+
+  decode(input: Reader | Uint8Array, length?: number): QueryTweetsRequest {
+    const reader = input instanceof Uint8Array ? new Reader(input) : input;
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = { ...baseQueryTweetsRequest } as QueryTweetsRequest;
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+
+  fromJSON(_: any): QueryTweetsRequest {
+    const message = { ...baseQueryTweetsRequest } as QueryTweetsRequest;
+    return message;
+  },
+
+  toJSON(_: QueryTweetsRequest): unknown {
+    const obj: any = {};
+    return obj;
+  },
+
+  fromPartial(_: DeepPartial<QueryTweetsRequest>): QueryTweetsRequest {
+    const message = { ...baseQueryTweetsRequest } as QueryTweetsRequest;
+    return message;
+  },
+};
+
+const baseQueryTweetsResponse: object = { content: "" };
+
+export const QueryTweetsResponse = {
+  encode(
+    message: QueryTweetsResponse,
+    writer: Writer = Writer.create()
+  ): Writer {
+    if (message.content !== "") {
+      writer.uint32(10).string(message.content);
+    }
+    return writer;
+  },
+
+  decode(input: Reader | Uint8Array, length?: number): QueryTweetsResponse {
+    const reader = input instanceof Uint8Array ? new Reader(input) : input;
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = { ...baseQueryTweetsResponse } as QueryTweetsResponse;
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.content = reader.string();
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+
+  fromJSON(object: any): QueryTweetsResponse {
+    const message = { ...baseQueryTweetsResponse } as QueryTweetsResponse;
+    if (object.content !== undefined && object.content !== null) {
+      message.content = String(object.content);
+    } else {
+      message.content = "";
+    }
+    return message;
+  },
+
+  toJSON(message: QueryTweetsResponse): unknown {
+    const obj: any = {};
+    message.content !== undefined && (obj.content = message.content);
+    return obj;
+  },
+
+  fromPartial(object: DeepPartial<QueryTweetsResponse>): QueryTweetsResponse {
+    const message = { ...baseQueryTweetsResponse } as QueryTweetsResponse;
+    if (object.content !== undefined && object.content !== null) {
+      message.content = object.content;
+    } else {
+      message.content = "";
+    }
+    return message;
+  },
+};
+
 /** Query defines the gRPC querier service. */
 export interface Query {
   /** Parameters queries the parameters of the module. */
   Params(request: QueryParamsRequest): Promise<QueryParamsResponse>;
+  /** Queries a list of Tweets items. */
+  Tweets(request: QueryTweetsRequest): Promise<QueryTweetsResponse>;
 }
 
 export class QueryClientImpl implements Query {
@@ -129,6 +233,16 @@ export class QueryClientImpl implements Query {
       data
     );
     return promise.then((data) => QueryParamsResponse.decode(new Reader(data)));
+  }
+
+  Tweets(request: QueryTweetsRequest): Promise<QueryTweetsResponse> {
+    const data = QueryTweetsRequest.encode(request).finish();
+    const promise = this.rpc.request(
+      "xmonader.dwitter.dwitter.Query",
+      "Tweets",
+      data
+    );
+    return promise.then((data) => QueryTweetsResponse.decode(new Reader(data)));
   }
 }
 

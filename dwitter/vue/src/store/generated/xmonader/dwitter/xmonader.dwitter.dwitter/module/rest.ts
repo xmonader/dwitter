@@ -27,6 +27,10 @@ export interface DwitterQueryParamsResponse {
   params?: DwitterParams;
 }
 
+export interface DwitterQueryTweetsResponse {
+  content?: string;
+}
+
 export interface ProtobufAny {
   "@type"?: string;
 }
@@ -245,6 +249,22 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
   queryParams = (params: RequestParams = {}) =>
     this.request<DwitterQueryParamsResponse, RpcStatus>({
       path: `/xmonader/dwitter/dwitter/params`,
+      method: "GET",
+      format: "json",
+      ...params,
+    });
+
+  /**
+   * No description
+   *
+   * @tags Query
+   * @name QueryTweets
+   * @summary Queries a list of Tweets items.
+   * @request GET:/xmonader/dwitter/dwitter/tweets
+   */
+  queryTweets = (params: RequestParams = {}) =>
+    this.request<DwitterQueryTweetsResponse, RpcStatus>({
+      path: `/xmonader/dwitter/dwitter/tweets`,
       method: "GET",
       format: "json",
       ...params,

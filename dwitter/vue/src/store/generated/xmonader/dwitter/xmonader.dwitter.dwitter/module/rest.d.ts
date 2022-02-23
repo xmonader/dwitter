@@ -13,6 +13,9 @@ export interface DwitterQueryParamsResponse {
     /** params holds all the parameters of this module. */
     params?: DwitterParams;
 }
+export interface DwitterQueryTweetsResponse {
+    content?: string;
+}
 export interface ProtobufAny {
     "@type"?: string;
 }
@@ -89,5 +92,14 @@ export declare class Api<SecurityDataType extends unknown> extends HttpClient<Se
      * @request GET:/xmonader/dwitter/dwitter/params
      */
     queryParams: (params?: RequestParams) => Promise<HttpResponse<DwitterQueryParamsResponse, RpcStatus>>;
+    /**
+     * No description
+     *
+     * @tags Query
+     * @name QueryTweets
+     * @summary Queries a list of Tweets items.
+     * @request GET:/xmonader/dwitter/dwitter/tweets
+     */
+    queryTweets: (params?: RequestParams) => Promise<HttpResponse<DwitterQueryTweetsResponse, RpcStatus>>;
 }
 export {};
